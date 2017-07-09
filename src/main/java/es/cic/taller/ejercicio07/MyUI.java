@@ -51,15 +51,17 @@ public class MyUI extends UI {
         DateTimeField tfFechaNac  = new DateTimeField();
         tfFechaNac.setCaption("Fecha: ");
         
+        
+        
             
   
         Collection<Pais> listaPaises = getListaPaises();
-        ComboBox<Pais> cbpais = new ComboBox<>("Select your country", listaPaises);
-        cbpais.setPlaceholder("No country selected");
-        cbpais.setItemCaptionGenerator(Pais::getNombreCompleto);
+        ComboBox<Pais> cbPais = new ComboBox<>("Select your country", listaPaises);
+        cbPais.setPlaceholder("No country selected");
+        cbPais.setItemCaptionGenerator(Pais::getNombreCompleto);
  
         // Disallow null selections
-        cbpais.setEmptySelectionAllowed(false);
+        cbPais.setEmptySelectionAllowed(false);
  
        
         
@@ -68,14 +70,29 @@ public class MyUI extends UI {
         	Persona persona=new Persona();
         	persona.setNombre(tfNombre.getValue());
         	persona.setApellidos(tfApellidos.getValue());
-        	persona.setFechaNac(tfFechaNac.getEmptyValue());
+        	persona.setFechaNac(tfFechaNac.getValue());
+        	
+        	
+        	persona.setFechaNac(tfFechaNac.getValue());
+        	persona.setPais(cbPais.getValue());
         	
         	Notification.show(calcularMensaje(persona),
                        Type.TRAY_NOTIFICATION);        
 	
         });
         
-        layout.addComponents(tfNombre, tfApellidos, tfFechaNac,  cbpais, button);
+        Button button2 = new Button("Cambia");
+        button2.addClickListener( e -> {
+        	button.setVisible(!button.isVisible());
+//        	if (button.isVisible()) {
+//        		button.setVisible(false);
+//        	} else {
+//        		button.setVisible(true);
+//        	}
+        	
+        });
+        
+        layout.addComponents(tfNombre, tfApellidos, tfFechaNac,  cbPais, button,button2);
         
         setContent(layout);
     }
@@ -87,9 +104,9 @@ public class MyUI extends UI {
 		if (fecha!=null) {
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MM yy");
 			sFecha = fecha.format(dtf);
-		}
+			}
 		
-		String mensaje=String.format("Mis datos %s %s, estamos a %s en %s", persona.getNombre(), persona.getApellidos(),persona.getFechaNac(),sFecha, persona.getPais());
+		String mensaje=String.format("Mis datos %s %s, estamos a %s en %s", persona.getNombre(), persona.getApellidos(),sFecha, persona.getPais());
 		return mensaje;
 	}
 
